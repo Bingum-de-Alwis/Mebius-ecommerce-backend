@@ -6,9 +6,7 @@ This repository contains the back end of the Mebius e-commerce project.
 - [About](#about)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+  
 
 ## About
 The back end of the Mebius e-commerce project is built using JavaScript. It handles all server-side operations, including database interactions, user authentication, and other backend functionalities.
