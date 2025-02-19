@@ -12,7 +12,7 @@ export const getCategories = async (
 ) => {
   try {
     const data = await Category.find();
-    res.status(200).json(data).send();
+    res.status(200).json(data);
     return;
   } catch (error) {
     next(error);
