@@ -4,6 +4,7 @@ import ValidationError from "../Routes/domain/errors/validation-error";
 import Order from "../infrastructure/schemas/Order";
 import { getAuth } from "@clerk/express";
 import NotFoundError from "../Routes/domain/errors/not-found-error";
+import Address from "../infrastructure/schemas/Address";
 
 const orderSchema = z.object({
   items: z
@@ -18,6 +19,14 @@ const orderSchema = z.object({
       quantity: z.number(),
     })
     .array(),
+  shippingAddress: z.object({
+    line_1: z.string(),
+    line_2: z.string(),
+    city: z.string(),
+    state: z.string(),
+    zip_code: z.string(),
+    phone: z.string(),
+  }),
 });
 
 export const createOrder = async (
@@ -27,7 +36,7 @@ export const createOrder = async (
 ) => {
   try {
     const order = req.body;
-    // console.log(order);
+    console.log(order);
     const result = orderSchema.safeParse(order);
     if (!result.success) {
       console.log(result.error);
@@ -36,9 +45,14 @@ export const createOrder = async (
 
     const userId = getAuth(req).userId;
 
+    const address = await Address.create({
+      ...result.data.shippingAddress,
+    });
+
     await Order.create({
       userId: "user_2rUT3YfIos3Loal9MUyWuqt974a",
       items: result.data.items,
+      addressId: address._id,
     });
 
     res.status(201).send();
@@ -54,7 +68,10 @@ export const getOrder = async (
 ) => {
   try {
     const id = req.params.id;
-    const order = await Order.findById(id);
+    const order = await Order.findById(id).populate({
+      path: "addressId",
+      model: "Address",
+    });
     if (!order) {
       throw new NotFoundError("Order not found");
     }
