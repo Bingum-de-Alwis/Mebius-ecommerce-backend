@@ -36,7 +36,7 @@ export const getAddress = async (
   try {
     const id = req.params.id;
     const address = await Address.findById(id);
-
+    
     if (!address) {
       throw new NotFoundError("Address not found");
     }
@@ -92,4 +92,4 @@ export const deleteAddress = async (
   } catch (error) {
     next(error);
   }
-};
+}; 

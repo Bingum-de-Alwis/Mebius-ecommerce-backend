@@ -44,7 +44,7 @@ export const createOrder = async (
     }
 
     const userId = getAuth(req).userId;
-
+    
     const address = await Address.create({
       ...result.data.shippingAddress,
     });
